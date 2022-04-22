@@ -1,0 +1,6 @@
+[filesystem "AdoptOpenJDK|1.8.0_275|2081371348"]
+	timestampResolution = 1001 microseconds
+	minRacyThreshold = 0 nanoseconds
+[user]
+	name = PythonIsNotASnake
+	email = berndmampe@web.de
