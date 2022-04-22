@@ -2,5 +2,5 @@
 	timestampResolution = 1001 microseconds
 	minRacyThreshold = 0 nanoseconds
 [user]
-	name = PythonIsNotASnake
+	name = Bob
 	email = berndmampe@web.de
