@@ -25,10 +25,10 @@ public class RecordController {
     @RequestMapping(method = RequestMethod.GET)
     @ResponseBody
     public List<Record> getRecords(
-            @RequestParam("sortDirection") String sortDirection,
-            @RequestParam("sortValue") String sortValue,
-            @RequestParam("start") Long start,
-            @RequestParam("limit") Long limit
+            @RequestParam(name = "sortDirection", required = false) String sortDirection,
+            @RequestParam(name = "sortValue", required = false) String sortValue,
+            @RequestParam(name = "start", required = false) Long start,
+            @RequestParam(name = "limit", required = false) Long limit
     ) {
         return recordHandler.getEntities(sortDirection, sortValue, start, limit);
     }
