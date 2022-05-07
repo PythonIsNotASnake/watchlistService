@@ -2,13 +2,11 @@ package com.pinas.watchlistService.controller;
 
 import com.pinas.watchlistService.handler.GenreHandler;
 import com.pinas.watchlistService.model.Genre;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+@CrossOrigin
 @RestController
 @RequestMapping("genres")
 public class GenreController {
