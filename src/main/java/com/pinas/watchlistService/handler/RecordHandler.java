@@ -2,7 +2,8 @@ package com.pinas.watchlistService.handler;
 
 import com.pinas.watchlistService.entity.Record;
 import com.pinas.watchlistService.repository.RecordRepository;
-
+import com.pinas.watchlistService.response.ResponseRecord;
+import com.pinas.watchlistService.response.ResponseRecords;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Component;
@@ -24,7 +25,7 @@ public class RecordHandler {
         return entity.orElse(null);
     }
 
-    public List<Record> getEntities(
+    public ResponseRecords getEntities(
             String sortDirection,
             String sortValue,
             Long start,
@@ -58,16 +59,19 @@ public class RecordHandler {
                 limit.intValue(),
                 Sort.by(direction, sortableValue.name().toLowerCase()));
 
-        return repository.findAll(request).getContent();
+        List<Record> records = repository.findAll(request).getContent();
+        long total = repository.count();
+
+        return buildResponseRecords(records, total);
     }
 
-    public Record createEntity(Record entity) {
-        return repository.insert(entity);
+    public ResponseRecord createEntity(Record entity) {
+        return buildResponseRecord(repository.insert(entity));
     }
 
-    public Record updateEntity(String id, Record entity) {
+    public ResponseRecord updateEntity(String id, Record entity) {
         entity.setId(id);
-        return repository.save(entity);
+        return buildResponseRecord(repository.save(entity));
     }
 
     public String deleteEntity(String id) {
@@ -77,5 +81,19 @@ public class RecordHandler {
         } catch (Exception e) {
             return "Record could not be deleted: " + e.getMessage();
         }
+    }
+
+    private ResponseRecord buildResponseRecord(Record record) {
+        ResponseRecord response = new ResponseRecord();
+        response.setData(record);
+        return response;
+    }
+
+    private ResponseRecords buildResponseRecords(List<Record> records, long total) {
+        ResponseRecords response = new ResponseRecords();
+        response.setData(records);
+        response.setCount(records.size());
+        response.setTotal(total);
+        return response;
     }
 }

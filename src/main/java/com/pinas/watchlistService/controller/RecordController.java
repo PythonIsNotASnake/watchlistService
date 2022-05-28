@@ -2,9 +2,9 @@ package com.pinas.watchlistService.controller;
 
 import com.pinas.watchlistService.entity.Record;
 import com.pinas.watchlistService.handler.RecordHandler;
+import com.pinas.watchlistService.response.ResponseRecord;
+import com.pinas.watchlistService.response.ResponseRecords;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @CrossOrigin
 @RestController
@@ -25,7 +25,7 @@ public class RecordController {
 
     @RequestMapping(method = RequestMethod.GET)
     @ResponseBody
-    public List<Record> getRecords(
+    public ResponseRecords getRecords(
             @RequestParam(name = "sortDirection", required = false) String sortDirection,
             @RequestParam(name = "sortValue", required = false) String sortValue,
             @RequestParam(name = "start", required = false) Long start,
@@ -36,14 +36,14 @@ public class RecordController {
 
     @RequestMapping(method = RequestMethod.POST)
     @ResponseBody
-    public Record createRecord(@RequestBody Record record) {
+    public ResponseRecord createRecord(@RequestBody Record record) {
         return recordHandler.createEntity(record);
     }
 
     @RequestMapping(value = "/{id}", method = RequestMethod.PUT)
     @ResponseBody
-    public Record updateRecord(@PathVariable("id") String id,
-                               @RequestBody Record record) {
+    public ResponseRecord updateRecord(@PathVariable("id") String id,
+                                       @RequestBody Record record) {
         return recordHandler.updateEntity(id, record);
     }
 
