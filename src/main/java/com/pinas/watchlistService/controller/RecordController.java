@@ -42,14 +42,14 @@ public class RecordController {
 
     @RequestMapping(value = "/{id}", method = RequestMethod.PUT)
     @ResponseBody
-    public ResponseRecord updateRecord(@PathVariable("id") String id,
+    public ResponseRecord updateRecord(@PathVariable("id") Long id,
                                        @RequestBody Record record) {
         return recordHandler.updateEntity(id, record);
     }
 
     @RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
     @ResponseBody
-    public String deleteRecord(@PathVariable("id") String id) {
+    public String deleteRecord(@PathVariable("id") Long id) {
         return recordHandler.deleteEntity(id);
     }
 }

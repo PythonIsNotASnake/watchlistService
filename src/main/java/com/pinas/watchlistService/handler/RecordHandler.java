@@ -66,17 +66,17 @@ public class RecordHandler {
     }
 
     public ResponseRecord createEntity(Record entity) {
-        return buildResponseRecord(repository.insert(entity));
+        return buildResponseRecord(repository.save(entity));
     }
 
-    public ResponseRecord updateEntity(String id, Record entity) {
+    public ResponseRecord updateEntity(Long id, Record entity) {
         entity.setId(id);
         return buildResponseRecord(repository.save(entity));
     }
 
-    public String deleteEntity(String id) {
+    public String deleteEntity(Long id) {
         try {
-            repository.deleteById(id);
+            repository.deleteById(String.valueOf(id));
             return "Successfully deleted.";
         } catch (Exception e) {
             return "Record could not be deleted: " + e.getMessage();

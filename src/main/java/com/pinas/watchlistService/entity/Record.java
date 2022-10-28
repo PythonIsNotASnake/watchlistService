@@ -1,14 +1,13 @@
 package com.pinas.watchlistService.entity;
 
 import lombok.Data;
-import org.springframework.data.annotation.Id;
-import org.springframework.data.domain.Sort;
-import org.springframework.data.mongodb.core.mapping.Document;
 
+import javax.persistence.*;
 import java.util.Locale;
 
 @Data
-@Document
+@Entity
+@Table
 public class Record {
 
     public enum SortableRecordValue {
@@ -25,10 +24,19 @@ public class Record {
     }
 
     @Id
-    private String id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    @Column
     private String title;
+
+    @Column
     private String description;
+
+    @Column
     private String genre;
+
+    @Column
     private String link;
 
 }
