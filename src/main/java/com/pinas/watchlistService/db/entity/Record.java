@@ -1,4 +1,4 @@
-package com.pinas.watchlistService.entity;
+package com.pinas.watchlistService.db.entity;
 
 import lombok.Data;
 

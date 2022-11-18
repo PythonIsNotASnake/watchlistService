@@ -1,6 +1,6 @@
-package com.pinas.watchlistService.response;
+package com.pinas.watchlistService.api.response;
 
-import com.pinas.watchlistService.entity.Record;
+import com.pinas.watchlistService.db.entity.Record;
 import lombok.Data;
 
 import java.util.List;

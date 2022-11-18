@@ -1,11 +1,9 @@
-package com.pinas.watchlistService.controller;
+package com.pinas.watchlistService.api.controller;
 
-import com.dropbox.core.DbxException;
-import com.pinas.watchlistService.DropboxConfig;
-import com.pinas.watchlistService.entity.Record;
+import com.pinas.watchlistService.db.entity.Record;
 import com.pinas.watchlistService.handler.RecordHandler;
-import com.pinas.watchlistService.response.ResponseRecord;
-import com.pinas.watchlistService.response.ResponseRecords;
+import com.pinas.watchlistService.api.response.ResponseRecord;
+import com.pinas.watchlistService.api.response.ResponseRecords;
 import org.springframework.web.bind.annotation.*;
 
 @CrossOrigin
@@ -21,7 +19,7 @@ public class RecordController {
 
     @RequestMapping(value = "/{id}", method = RequestMethod.GET)
     @ResponseBody
-    public Record getRecord(@PathVariable("id") String id) {
+    public Record getRecord(@PathVariable("id") Long id) {
         return recordHandler.getEntity(id);
     }
 

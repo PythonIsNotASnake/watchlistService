@@ -1,4 +1,4 @@
-package com.pinas.watchlistService.model;
+package com.pinas.watchlistService.api.model;
 
 import lombok.Data;
 

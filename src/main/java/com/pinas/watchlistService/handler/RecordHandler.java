@@ -1,13 +1,12 @@
 package com.pinas.watchlistService.handler;
 
-import com.dropbox.core.DbxException;
 import com.pinas.watchlistService.DropboxConfig;
-import com.pinas.watchlistService.entity.Record;
-import com.pinas.watchlistService.repository.RecordRepository;
-import com.pinas.watchlistService.response.ResponseRecord;
-import com.pinas.watchlistService.response.ResponseRecords;
+import com.pinas.watchlistService.db.entity.Record;
+import com.pinas.watchlistService.helper.AccessTokenHelper;
+import com.pinas.watchlistService.db.repository.RecordRepository;
+import com.pinas.watchlistService.api.response.ResponseRecord;
+import com.pinas.watchlistService.api.response.ResponseRecords;
 import org.springframework.beans.InvalidPropertyException;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Component;
@@ -19,14 +18,16 @@ import java.util.Optional;
 public class RecordHandler {
 
     private final RecordRepository repository;
+    private final AccessTokenHelper accessTokenHelper;
     private final DropboxConfig dropboxConfig;
 
-    public RecordHandler(RecordRepository repository, DropboxConfig dropboxConfig) {
+    public RecordHandler(RecordRepository repository, AccessTokenHelper accessTokenHelper, DropboxConfig dropboxConfig) {
         this.repository = repository;
+        this.accessTokenHelper = accessTokenHelper;
         this.dropboxConfig = dropboxConfig;
     }
 
-    public Record getEntity(String id) {
+    public Record getEntity(Long id) {
         Optional<Record> entity = repository.findById(id);
         return entity.orElse(null);
     }
@@ -88,7 +89,7 @@ public class RecordHandler {
 
     public String deleteEntity(Long id) {
         try {
-            repository.deleteById(String.valueOf(id));
+            repository.deleteById(id);
             backupRecords();
             return "Successfully deleted.";
         } catch (Exception e) {
@@ -116,7 +117,8 @@ public class RecordHandler {
     }
 
     private void backupRecords() {
+        String accessToken = accessTokenHelper.getAccessToken();
         List<Record> allRecords = repository.findAll();
-        dropboxConfig.uploadBackup(allRecords);
+        dropboxConfig.uploadBackup(allRecords, accessToken);
     }
 }

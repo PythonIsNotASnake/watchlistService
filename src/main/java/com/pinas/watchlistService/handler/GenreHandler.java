@@ -1,7 +1,7 @@
 package com.pinas.watchlistService.handler;
 
-import com.pinas.watchlistService.model.Genre;
-import com.pinas.watchlistService.repository.RecordRepository;
+import com.pinas.watchlistService.api.model.Genre;
+import com.pinas.watchlistService.db.repository.RecordRepository;
 import org.springframework.stereotype.Component;
 
 import java.util.List;

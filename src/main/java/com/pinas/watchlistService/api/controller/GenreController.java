@@ -1,7 +1,7 @@
-package com.pinas.watchlistService.controller;
+package com.pinas.watchlistService.api.controller;
 
 import com.pinas.watchlistService.handler.GenreHandler;
-import com.pinas.watchlistService.model.Genre;
+import com.pinas.watchlistService.api.model.Genre;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
