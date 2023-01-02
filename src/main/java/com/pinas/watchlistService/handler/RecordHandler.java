@@ -112,8 +112,8 @@ public class RecordHandler {
     }
 
     private void validateEntity(Record record) {
-        if (record.getLink() != null && !record.getLink().startsWith("http://www.youtube.com/embed/"))
-            throw new InvalidPropertyException(Record.class, "link", "Link must be start with 'http://www.youtube.com/embed/'");
+        if (record.getLink() != null && !record.getLink().startsWith("https://www.youtube.com/embed/"))
+            throw new InvalidPropertyException(Record.class, "link", "Link must be start with 'https://www.youtube.com/embed/'");
     }
 
     private void backupRecords() {
