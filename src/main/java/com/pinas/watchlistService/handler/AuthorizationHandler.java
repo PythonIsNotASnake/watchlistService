@@ -25,6 +25,15 @@ public class AuthorizationHandler {
         this.dropboxConfig = dropboxConfig;
     }
 
+    public Boolean existsAccessToken() {
+        try {
+            accessTokenHelper.getAccessToken();
+            return true;
+        } catch (Exception e) {
+            return false;
+        }
+    }
+
     public Boolean createAccessToken(AuthorizationCode authCode) {
         ResponseEntity<AccessTokenResponse> response = exchangeAccessToken(authCode);
         return saveAccessToken(response);

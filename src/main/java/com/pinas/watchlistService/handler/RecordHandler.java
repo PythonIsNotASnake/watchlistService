@@ -117,8 +117,12 @@ public class RecordHandler {
     }
 
     private void backupRecords() {
-        String accessToken = accessTokenHelper.getAccessToken();
-        List<Record> allRecords = repository.findAll();
-        dropboxConfig.uploadBackup(allRecords, accessToken);
+        try {
+            String accessToken = accessTokenHelper.getAccessToken();
+            List<Record> allRecords = repository.findAll();
+            dropboxConfig.uploadBackup(allRecords, accessToken);
+        } catch (Exception e) {
+            System.out.println("Could not produce a backup: " + e.getMessage());
+        }
     }
 }

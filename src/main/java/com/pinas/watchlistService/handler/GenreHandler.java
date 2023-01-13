@@ -1,11 +1,12 @@
 package com.pinas.watchlistService.handler;
 
 import com.pinas.watchlistService.api.model.Genre;
+import com.pinas.watchlistService.db.entity.Record;
 import com.pinas.watchlistService.db.repository.RecordRepository;
-import org.springframework.stereotype.Component;
-
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
+import org.springframework.stereotype.Component;
 
 @Component
 public class GenreHandler {
@@ -17,6 +18,12 @@ public class GenreHandler {
     }
 
     public List<Genre> getGenres() {
-        return repository.findAllByGenreNotNull().stream().collect(Collectors.toList());
+        Set<Record> recordsWithGenre = repository.findAllByGenreNotNull();
+        Set<Genre> genres = recordsWithGenre.stream()
+                .map(Record::getGenre)
+                .map(genre -> new Genre(genre))
+                .collect(Collectors.toSet());
+
+        return genres.stream().collect(Collectors.toList());
     }
 }

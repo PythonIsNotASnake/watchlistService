@@ -7,5 +7,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.Set;
 
 public interface RecordRepository extends JpaRepository<Record, Long> {
-    public Set<Genre> findAllByGenreNotNull();
+    public Set<Record> findAllByGenreNotNull();
 }
