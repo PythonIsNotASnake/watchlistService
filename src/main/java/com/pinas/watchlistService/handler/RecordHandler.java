@@ -1,11 +1,10 @@
 package com.pinas.watchlistService.handler;
 
-import com.pinas.watchlistService.DropboxConfig;
-import com.pinas.watchlistService.db.entity.Record;
-import com.pinas.watchlistService.helper.AccessTokenHelper;
-import com.pinas.watchlistService.db.repository.RecordRepository;
 import com.pinas.watchlistService.api.response.ResponseRecord;
 import com.pinas.watchlistService.api.response.ResponseRecords;
+import com.pinas.watchlistService.db.entity.Record;
+import com.pinas.watchlistService.db.repository.RecordRepository;
+import com.pinas.watchlistService.helper.AccessTokenHelper;
 import org.springframework.beans.InvalidPropertyException;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
@@ -18,13 +17,9 @@ import java.util.Optional;
 public class RecordHandler {
 
     private final RecordRepository repository;
-    private final AccessTokenHelper accessTokenHelper;
-    private final DropboxConfig dropboxConfig;
 
-    public RecordHandler(RecordRepository repository, AccessTokenHelper accessTokenHelper, DropboxConfig dropboxConfig) {
+    public RecordHandler(RecordRepository repository, AccessTokenHelper accessTokenHelper) {
         this.repository = repository;
-        this.accessTokenHelper = accessTokenHelper;
-        this.dropboxConfig = dropboxConfig;
     }
 
     public Record getEntity(Long id) {
@@ -75,7 +70,6 @@ public class RecordHandler {
     public ResponseRecord createEntity(Record entity) {
         validateEntity(entity);
         Record save = repository.save(entity);
-        backupRecords();
         return buildResponseRecord(save);
     }
 
@@ -83,14 +77,12 @@ public class RecordHandler {
         entity.setId(id);
         validateEntity(entity);
         Record save = repository.save(entity);
-        backupRecords();
         return buildResponseRecord(save);
     }
 
     public String deleteEntity(Long id) {
         try {
             repository.deleteById(id);
-            backupRecords();
             return "Successfully deleted.";
         } catch (Exception e) {
             return "Record could not be deleted: " + e.getMessage();
@@ -114,15 +106,5 @@ public class RecordHandler {
     private void validateEntity(Record record) {
         if (record.getLink() != null && !record.getLink().startsWith("https://www.youtube.com/embed/"))
             throw new InvalidPropertyException(Record.class, "link", "Link must be start with 'https://www.youtube.com/embed/'");
-    }
-
-    private void backupRecords() {
-        try {
-            String accessToken = accessTokenHelper.getAccessToken();
-            List<Record> allRecords = repository.findAll();
-            dropboxConfig.uploadBackup(allRecords, accessToken);
-        } catch (Exception e) {
-            System.out.println("Could not produce a backup: " + e.getMessage());
-        }
     }
 }
