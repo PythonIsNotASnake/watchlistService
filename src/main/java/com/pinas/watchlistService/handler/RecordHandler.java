@@ -6,8 +6,10 @@ import com.pinas.watchlistService.db.entity.Record;
 import com.pinas.watchlistService.db.repository.RecordRepository;
 import com.pinas.watchlistService.helper.AccessTokenHelper;
 import org.springframework.beans.InvalidPropertyException;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -31,8 +33,47 @@ public class RecordHandler {
             String sortDirection,
             String sortValue,
             Long start,
-            Long limit
-    ) {
+            Long limit,
+            String filterTitle,
+            String filterGenre) {
+
+        PageRequest request = buildPageRequest(sortDirection, sortValue, start, limit);
+
+        Specification<Record> specification = buildFilterSpecification(filterTitle, filterGenre);
+
+        Page<Record> recordPage = null;
+        if (specification != null) {
+            recordPage = repository.findAll(specification, request);
+        } else {
+            recordPage = repository.findAll(request);
+        }
+        List<Record> records = recordPage.getContent();
+        long total = recordPage.getTotalElements();
+
+        return buildResponseRecords(records, total);
+    }
+
+    private Specification<Record> buildFilterSpecification(String filterTitle, String filterGenre) {
+        Specification<Record> specification = null;
+        if (filterTitle != null && !filterTitle.isEmpty()) {
+            Specification<Record> titleSpecification = (root, cq, cb) ->
+                    cb.like(cb.lower(root.get("title")), "%" + filterTitle.toLowerCase() + "%");
+            specification = specification != null ? specification.and(titleSpecification) : titleSpecification;
+        }
+        if (filterGenre != null && !filterGenre.isEmpty()) {
+            Specification<Record> genreSpecification = (root, cq, cb) ->
+                    cb.like(cb.lower(root.get("genre")), "%" + filterGenre.toLowerCase() + "%");
+            specification = specification != null ? specification.and(genreSpecification) : genreSpecification;
+        }
+        return specification;
+    }
+
+    private PageRequest buildPageRequest(
+            String sortDirection,
+            String sortValue,
+            Long start,
+            Long limit) {
+
         if (start == null)
             start = 0L;
         if (limit == null)
@@ -56,15 +97,10 @@ public class RecordHandler {
             sortableValue = Record.SortableRecordValue.ID;
         }
 
-        PageRequest request = PageRequest.of(
+        return PageRequest.of(
                 start.intValue(),
                 limit.intValue(),
                 Sort.by(direction, sortableValue.name().toLowerCase()));
-
-        List<Record> records = repository.findAll(request).getContent();
-        long total = repository.count();
-
-        return buildResponseRecords(records, total);
     }
 
     public ResponseRecord createEntity(Record entity) {

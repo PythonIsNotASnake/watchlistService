@@ -1,9 +1,9 @@
 package com.pinas.watchlistService.api.controller;
 
-import com.pinas.watchlistService.db.entity.Record;
-import com.pinas.watchlistService.handler.RecordHandler;
 import com.pinas.watchlistService.api.response.ResponseRecord;
 import com.pinas.watchlistService.api.response.ResponseRecords;
+import com.pinas.watchlistService.db.entity.Record;
+import com.pinas.watchlistService.handler.RecordHandler;
 import org.springframework.web.bind.annotation.*;
 
 @CrossOrigin
@@ -29,9 +29,11 @@ public class RecordController {
             @RequestParam(name = "sortDirection", required = false) String sortDirection,
             @RequestParam(name = "sortValue", required = false) String sortValue,
             @RequestParam(name = "start", required = false) Long start,
-            @RequestParam(name = "limit", required = false) Long limit
+            @RequestParam(name = "limit", required = false) Long limit,
+            @RequestParam(name = "filterTitle", required = false) String filterTitle,
+            @RequestParam(name = "filterGenre", required = false) String filterGenre
     ) {
-        return recordHandler.getEntities(sortDirection, sortValue, start, limit);
+        return recordHandler.getEntities(sortDirection, sortValue, start, limit, filterTitle, filterGenre);
     }
 
     @RequestMapping(method = RequestMethod.POST)
