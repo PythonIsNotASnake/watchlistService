@@ -2,9 +2,8 @@ package com.pinas.watchlistService.helper;
 
 import com.pinas.watchlistService.db.entity.Authorization;
 import com.pinas.watchlistService.db.repository.AuthorizationRepository;
-import org.springframework.stereotype.Component;
-
 import java.util.Base64;
+import org.springframework.stereotype.Component;
 
 @Component
 public class AccessTokenHelper {
@@ -15,9 +14,22 @@ public class AccessTokenHelper {
         this.repository = repository;
     }
 
-    public String getAccessToken() {
-        Authorization accessToken = repository.findById("AccessToken").orElseThrow();
-        return decodeAccessToken(accessToken.getValue());
+    public String getDropboxAccessToken() {
+        return decodeAccessToken(getAccessToken("DropboxAccessToken"));
+    }
+
+    public String getMastodonAccessToken() {
+        return decodeAccessToken(getAccessToken("MastodonAccessToken"));
+    }
+
+    private String getAccessToken(String key) {
+        Authorization accessToken = repository.findById(key).orElseThrow();
+        return accessToken.getValue();
+    }
+
+    public String getMastodonUrl() {
+        Authorization mastodonUrl = repository.findById("MastodonUrl").orElseThrow();
+        return mastodonUrl.getValue();
     }
 
     public String decodeAccessToken(String encodedAccessToken) {

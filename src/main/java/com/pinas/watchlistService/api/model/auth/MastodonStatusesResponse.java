@@ -6,16 +6,10 @@ import lombok.Data;
 
 @Data
 @JsonIgnoreProperties
-public class MastodonAccessTokenResponse {
-    @JsonProperty("access_token")
-    String accessToken;
-
-    @JsonProperty("token_type")
-    String tokenType;
-
-    @JsonProperty("scope")
-    String scope;
+public class MastodonStatusesResponse {
+    @JsonProperty("id")
+    String id;
 
     @JsonProperty("created_at")
-    Long createdAt;
+    String createdAt;
 }

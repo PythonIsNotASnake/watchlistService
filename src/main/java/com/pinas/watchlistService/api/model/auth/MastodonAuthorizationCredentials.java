@@ -3,6 +3,7 @@ package com.pinas.watchlistService.api.model.auth;
 import lombok.Data;
 
 @Data
-public class DropboxAuthorizationCode {
+public class MastodonAuthorizationCredentials {
     String authorizationCode;
+    String mastodonUrl;
 }

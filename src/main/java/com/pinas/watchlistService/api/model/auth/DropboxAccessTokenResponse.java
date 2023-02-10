@@ -6,7 +6,7 @@ import lombok.Data;
 
 @Data
 @JsonIgnoreProperties
-public class AccessTokenResponse {
+public class DropboxAccessTokenResponse {
 
     @JsonProperty("access_token")
     String accessToken;

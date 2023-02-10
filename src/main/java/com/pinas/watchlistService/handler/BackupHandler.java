@@ -1,13 +1,12 @@
 package com.pinas.watchlistService.handler;
 
 import com.pinas.watchlistService.DropboxConfig;
-import com.pinas.watchlistService.db.entity.Record;
-import com.pinas.watchlistService.helper.AccessTokenHelper;
-import com.pinas.watchlistService.db.repository.RecordRepository;
 import com.pinas.watchlistService.api.response.ResponseRecords;
-import org.springframework.stereotype.Component;
-
+import com.pinas.watchlistService.db.entity.Record;
+import com.pinas.watchlistService.db.repository.RecordRepository;
+import com.pinas.watchlistService.helper.AccessTokenHelper;
 import java.util.List;
+import org.springframework.stereotype.Component;
 
 @Component
 public class BackupHandler {
@@ -48,13 +47,13 @@ public class BackupHandler {
     }
 
     private void backupRecords() {
-        String accessToken = accessTokenHelper.getAccessToken();
+        String accessToken = accessTokenHelper.getDropboxAccessToken();
         List<Record> allRecords = repository.findAll();
         dropboxConfig.uploadBackup(allRecords, accessToken);
     }
 
     private void restoreRecords() {
-        String accessToken = accessTokenHelper.getAccessToken();
+        String accessToken = accessTokenHelper.getDropboxAccessToken();
         List<Record> records = dropboxConfig.downloadBackup(accessToken);
         if (records != null) {
             repository.deleteAll();

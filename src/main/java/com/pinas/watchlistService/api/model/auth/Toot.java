@@ -3,6 +3,6 @@ package com.pinas.watchlistService.api.model.auth;
 import lombok.Data;
 
 @Data
-public class AuthorizationCode {
-    String authorizationCode;
+public class Toot {
+    Long recordId;
 }

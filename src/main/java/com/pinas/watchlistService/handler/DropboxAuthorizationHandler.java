@@ -1,25 +1,29 @@
 package com.pinas.watchlistService.handler;
 
 import com.pinas.watchlistService.DropboxConfig;
+import com.pinas.watchlistService.api.model.auth.DropboxAccessTokenResponse;
+import com.pinas.watchlistService.api.model.auth.DropboxAuthorizationCode;
 import com.pinas.watchlistService.db.entity.Authorization;
-import com.pinas.watchlistService.helper.AccessTokenHelper;
-import com.pinas.watchlistService.api.model.auth.AccessTokenResponse;
-import com.pinas.watchlistService.api.model.auth.AuthorizationCode;
 import com.pinas.watchlistService.db.repository.AuthorizationRepository;
-import org.springframework.http.*;
+import com.pinas.watchlistService.helper.AccessTokenHelper;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
 
 @Component
-public class AuthorizationHandler {
+public class DropboxAuthorizationHandler {
 
     private final AuthorizationRepository repository;
     private final AccessTokenHelper accessTokenHelper;
     private final DropboxConfig dropboxConfig;
 
-    public AuthorizationHandler(AuthorizationRepository repository, AccessTokenHelper accessTokenHelper, DropboxConfig dropboxConfig) {
+    public DropboxAuthorizationHandler(AuthorizationRepository repository, AccessTokenHelper accessTokenHelper, DropboxConfig dropboxConfig) {
         this.repository = repository;
         this.accessTokenHelper = accessTokenHelper;
         this.dropboxConfig = dropboxConfig;
@@ -34,12 +38,12 @@ public class AuthorizationHandler {
         }
     }
 
-    public Boolean createAccessToken(AuthorizationCode authCode) {
-        ResponseEntity<AccessTokenResponse> response = exchangeAccessToken(authCode);
+    public Boolean createAccessToken(DropboxAuthorizationCode authCode) {
+        ResponseEntity<DropboxAccessTokenResponse> response = exchangeAccessToken(authCode);
         return saveAccessToken(response);
     }
 
-    private ResponseEntity<AccessTokenResponse> exchangeAccessToken(AuthorizationCode authCode) {
+    private ResponseEntity<DropboxAccessTokenResponse> exchangeAccessToken(DropboxAuthorizationCode authCode) {
         RestTemplate restTemplate = new RestTemplate();
 
         HttpHeaders headers = new HttpHeaders();
@@ -52,21 +56,21 @@ public class AuthorizationHandler {
 
         HttpEntity<MultiValueMap<String, String>> request = new HttpEntity<>(map, headers);
 
-        ResponseEntity<AccessTokenResponse> response = restTemplate.exchange(
+        ResponseEntity<DropboxAccessTokenResponse> response = restTemplate.exchange(
                 "https://api.dropbox.com/oauth2/token",
                 HttpMethod.POST,
                 request,
-                AccessTokenResponse.class
+                DropboxAccessTokenResponse.class
         );
         return response;
     }
 
-    private Boolean saveAccessToken(ResponseEntity<AccessTokenResponse> response) {
+    private Boolean saveAccessToken(ResponseEntity<DropboxAccessTokenResponse> response) {
         response.getBody().getAccessToken();
         if (response.getBody() != null && response.getBody().getAccessToken() != null) {
             String encode = accessTokenHelper.encodeAccessToken(response.getBody().getAccessToken());
             Authorization authorization = new Authorization();
-            authorization.setKey("AccessToken");
+            authorization.setKey("DropboxAccessToken");
             authorization.setValue(encode);
             Authorization savedAuthorization = repository.save(authorization);
             return savedAuthorization != null;

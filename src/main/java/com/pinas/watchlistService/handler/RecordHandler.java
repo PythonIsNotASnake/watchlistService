@@ -4,7 +4,8 @@ import com.pinas.watchlistService.api.response.ResponseRecord;
 import com.pinas.watchlistService.api.response.ResponseRecords;
 import com.pinas.watchlistService.db.entity.Record;
 import com.pinas.watchlistService.db.repository.RecordRepository;
-import com.pinas.watchlistService.helper.AccessTokenHelper;
+import java.util.List;
+import java.util.Optional;
 import org.springframework.beans.InvalidPropertyException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -12,15 +13,12 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Component;
 
-import java.util.List;
-import java.util.Optional;
-
 @Component
 public class RecordHandler {
 
     private final RecordRepository repository;
 
-    public RecordHandler(RecordRepository repository, AccessTokenHelper accessTokenHelper) {
+    public RecordHandler(RecordRepository repository) {
         this.repository = repository;
     }
 
