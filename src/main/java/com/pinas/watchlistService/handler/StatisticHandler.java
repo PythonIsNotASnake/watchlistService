@@ -5,12 +5,13 @@ import com.pinas.watchlistService.api.model.GenrePopularity;
 import com.pinas.watchlistService.api.model.Statistic;
 import com.pinas.watchlistService.db.entity.Record;
 import com.pinas.watchlistService.db.repository.RecordRepository;
+import org.springframework.stereotype.Component;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
-import org.springframework.stereotype.Component;
 
 @Component
 public class StatisticHandler {
@@ -46,10 +47,8 @@ public class StatisticHandler {
                 .stream()
                 .sorted((f1, f2) -> Long.compare(f2.getValue(), f1.getValue()))
                 .forEach(entry -> {
-                    if (statistic.getGenrePopularityList().size() < 5) {
-                        GenrePopularity popularity = new GenrePopularity(entry.getKey(), entry.getValue());
-                        statistic.getGenrePopularityList().add(popularity);
-                    }
+                    GenrePopularity popularity = new GenrePopularity(entry.getKey(), entry.getValue());
+                    statistic.getGenrePopularityList().add(popularity);
                 });
 
         return statistic;
