@@ -2,6 +2,7 @@ package com.pinas.watchlistService.handler;
 
 import com.pinas.watchlistService.api.model.auth.MastodonStatusesResponse;
 import com.pinas.watchlistService.api.model.auth.Toot;
+import com.pinas.watchlistService.api.model.auth.TootPreview;
 import com.pinas.watchlistService.db.entity.Record;
 import com.pinas.watchlistService.db.repository.RecordRepository;
 import com.pinas.watchlistService.helper.AccessTokenHelper;
@@ -26,6 +27,16 @@ public class MastodonHandler {
     public MastodonHandler(AccessTokenHelper accessTokenHelper, RecordRepository recordRepository) {
         this.accessTokenHelper = accessTokenHelper;
         this.recordRepository = recordRepository;
+    }
+
+    public TootPreview tootPreview(Toot toot) {
+        Optional<Record> entity = recordRepository.findById(toot.getRecordId());
+        if (entity.isEmpty()) {
+            return new TootPreview();
+        }
+        TootPreview preview = new TootPreview();
+        preview.setTootBody(buildToot(entity.get()));
+        return preview;
     }
 
     public boolean toot(Toot toot) {

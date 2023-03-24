@@ -1,5 +1,7 @@
 package com.pinas.watchlistService.api.controller;
 
+import com.pinas.watchlistService.api.model.AccessToken;
+import com.pinas.watchlistService.db.entity.Record;
 import com.pinas.watchlistService.handler.BackupHandler;
 import com.pinas.watchlistService.api.response.ResponseRecords;
 import org.springframework.web.bind.annotation.*;
@@ -17,13 +19,13 @@ public class BackupController {
 
     @RequestMapping(value = "/restore", method = RequestMethod.POST)
     @ResponseBody
-    public ResponseRecords restoreBackup() {
-        return backupHandler.restoreEntities();
+    public ResponseRecords restoreBackup(@RequestBody AccessToken dropboxAccessToken) {
+        return backupHandler.restoreEntities(dropboxAccessToken);
     }
 
     @RequestMapping(value = "/store", method = RequestMethod.POST)
     @ResponseBody
-    public ResponseRecords storeBackup() {
-        return backupHandler.backupEntities();
+    public ResponseRecords storeBackup(@RequestBody AccessToken dropboxAccessToken) {
+        return backupHandler.backupEntities(dropboxAccessToken);
     }
 }

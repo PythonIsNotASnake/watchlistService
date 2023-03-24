@@ -14,10 +14,6 @@ public class AccessTokenHelper {
         this.repository = repository;
     }
 
-    public String getDropboxAccessToken() {
-        return decodeAccessToken(getAccessToken("DropboxAccessToken"));
-    }
-
     public String getMastodonAccessToken() {
         return decodeAccessToken(getAccessToken("MastodonAccessToken"));
     }

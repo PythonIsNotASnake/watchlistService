@@ -3,7 +3,6 @@ package com.pinas.watchlistService.handler;
 import com.pinas.watchlistService.DropboxConfig;
 import com.pinas.watchlistService.api.model.auth.DropboxAccessTokenResponse;
 import com.pinas.watchlistService.api.model.auth.DropboxAuthorizationCode;
-import com.pinas.watchlistService.db.entity.Authorization;
 import com.pinas.watchlistService.db.repository.AuthorizationRepository;
 import com.pinas.watchlistService.helper.AccessTokenHelper;
 import org.springframework.http.HttpEntity;
@@ -29,18 +28,11 @@ public class DropboxAuthorizationHandler {
         this.dropboxConfig = dropboxConfig;
     }
 
-    public Boolean existsAccessToken() {
-        try {
-            accessTokenHelper.getDropboxAccessToken();
-            return true;
-        } catch (Exception e) {
-            return false;
-        }
-    }
-
-    public Boolean createAccessToken(DropboxAuthorizationCode authCode) {
+    public DropboxAccessTokenResponse createAccessToken(DropboxAuthorizationCode authCode) {
         ResponseEntity<DropboxAccessTokenResponse> response = exchangeAccessToken(authCode);
-        return saveAccessToken(response);
+
+        //return saveAccessToken(response);
+        return response.getBody();
     }
 
     private ResponseEntity<DropboxAccessTokenResponse> exchangeAccessToken(DropboxAuthorizationCode authCode) {
@@ -63,19 +55,5 @@ public class DropboxAuthorizationHandler {
                 DropboxAccessTokenResponse.class
         );
         return response;
-    }
-
-    private Boolean saveAccessToken(ResponseEntity<DropboxAccessTokenResponse> response) {
-        response.getBody().getAccessToken();
-        if (response.getBody() != null && response.getBody().getAccessToken() != null) {
-            String encode = accessTokenHelper.encodeAccessToken(response.getBody().getAccessToken());
-            Authorization authorization = new Authorization();
-            authorization.setKey("DropboxAccessToken");
-            authorization.setValue(encode);
-            Authorization savedAuthorization = repository.save(authorization);
-            return savedAuthorization != null;
-        }
-
-        return false;
     }
 }

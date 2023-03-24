@@ -1,5 +1,6 @@
 package com.pinas.watchlistService.api.controller;
 
+import com.pinas.watchlistService.api.model.auth.DropboxAccessTokenResponse;
 import com.pinas.watchlistService.api.model.auth.DropboxAuthorizationCode;
 import com.pinas.watchlistService.handler.DropboxAuthorizationHandler;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -20,15 +21,9 @@ public class DropboxController {
         this.dropboxAuthorizationHandler = dropboxAuthorizationHandler;
     }
 
-    @RequestMapping(value = "/authorized", method = RequestMethod.GET)
-    @ResponseBody
-    public Boolean authorized() {
-        return dropboxAuthorizationHandler.existsAccessToken();
-    }
-
     @RequestMapping(value = "/authorize", method = RequestMethod.POST)
     @ResponseBody
-    public Boolean authorize(@RequestBody DropboxAuthorizationCode authCode) {
+    public DropboxAccessTokenResponse authorize(@RequestBody DropboxAuthorizationCode authCode) {
         return dropboxAuthorizationHandler.createAccessToken(authCode);
     }
 }

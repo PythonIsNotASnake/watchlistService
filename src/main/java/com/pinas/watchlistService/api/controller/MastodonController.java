@@ -2,6 +2,7 @@ package com.pinas.watchlistService.api.controller;
 
 import com.pinas.watchlistService.api.model.auth.MastodonAuthorizationCredentials;
 import com.pinas.watchlistService.api.model.auth.Toot;
+import com.pinas.watchlistService.api.model.auth.TootPreview;
 import com.pinas.watchlistService.handler.MastodonAuthorizationHandler;
 import com.pinas.watchlistService.handler.MastodonHandler;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -48,5 +49,11 @@ public class MastodonController {
     @ResponseBody
     public Boolean toot(@RequestBody Toot toot) {
         return mastodonHandler.toot(toot);
+    }
+
+    @RequestMapping(value = "/toot/preview", method = RequestMethod.POST)
+    @ResponseBody
+    public TootPreview tootPreview(@RequestBody Toot toot) {
+        return mastodonHandler.tootPreview(toot);
     }
 }

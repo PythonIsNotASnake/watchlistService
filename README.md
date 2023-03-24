@@ -1,11 +1,17 @@
 # watchlistService
 API to memorized about watched series and movies
 
-1. [Deployment](#deployment)  
-1.1. [Configure application.properties](#configure-applicationproperties)  
-1.2. [Deploy on ARM32 Architecture (e.g. Raspberry PI)](#deploy-on-arm32-architecture-eg-raspberry-pi)  
-1.3. [Deploy on ARM64 Architecture (e.g. Raspberry PI since Raspberry 3)](#deploy-on-arm64-architecture-eg-raspberry-pi-since-raspberry-3)  
-1.4. [Deploy on x86_64 Architecture (regular desktop pcs with Intel or AMD CPU)](#deploy-on-x86_64-architecture-regular-pcs-with-intel-or-amd-cpu)  
+## Disclaimer: Watchlist is only for use inside a private network. The software does not support any kind of user management. So if you add data or logged in with third party accounts everyone has access to your created data.
+
+1. [API Documentation](#api-documentation)
+2. [Deployment](#deployment)  
+2.1. [Configure application.properties](#configure-applicationproperties)  
+2.2. [Deploy on ARM32 Architecture (e.g. Raspberry PI)](#deploy-on-arm32-architecture-eg-raspberry-pi)  
+2.3. [Deploy on ARM64 Architecture (e.g. Raspberry PI since Raspberry 3)](#deploy-on-arm64-architecture-eg-raspberry-pi-since-raspberry-3)  
+2.4. [Deploy on x86_64 Architecture (regular desktop pcs with Intel or AMD CPU)](#deploy-on-x86_64-architecture-regular-pcs-with-intel-or-amd-cpu)  
+
+# API Documentation
+After running the service the default path to get the swagger open api documentation is http://localhost:8080/swagger-ui  
 
 # Deployment
 

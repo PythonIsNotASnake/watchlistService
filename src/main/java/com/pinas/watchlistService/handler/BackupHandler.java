@@ -1,10 +1,10 @@
 package com.pinas.watchlistService.handler;
 
 import com.pinas.watchlistService.DropboxConfig;
+import com.pinas.watchlistService.api.model.AccessToken;
 import com.pinas.watchlistService.api.response.ResponseRecords;
 import com.pinas.watchlistService.db.entity.Record;
 import com.pinas.watchlistService.db.repository.RecordRepository;
-import com.pinas.watchlistService.helper.AccessTokenHelper;
 import java.util.List;
 import org.springframework.stereotype.Component;
 
@@ -12,22 +12,20 @@ import org.springframework.stereotype.Component;
 public class BackupHandler {
 
     private final RecordRepository repository;
-    private final AccessTokenHelper accessTokenHelper;
     private final DropboxConfig dropboxConfig;
 
-    public BackupHandler(RecordRepository repository, AccessTokenHelper accessTokenHelper, DropboxConfig dropboxConfig) {
+    public BackupHandler(RecordRepository repository, DropboxConfig dropboxConfig) {
         this.repository = repository;
-        this.accessTokenHelper = accessTokenHelper;
         this.dropboxConfig = dropboxConfig;
     }
 
-    public ResponseRecords restoreEntities() {
-        restoreRecords();
+    public ResponseRecords restoreEntities(AccessToken dropboxAccessToken) {
+        restoreRecords(dropboxAccessToken);
         return getFullResponseRecords();
     }
 
-    public ResponseRecords backupEntities() {
-        backupRecords();
+    public ResponseRecords backupEntities(AccessToken dropboxAccessToken) {
+        backupRecords(dropboxAccessToken);
         return getFullResponseRecords();
     }
 
@@ -46,15 +44,13 @@ public class BackupHandler {
         return response;
     }
 
-    private void backupRecords() {
-        String accessToken = accessTokenHelper.getDropboxAccessToken();
+    private void backupRecords(AccessToken dropboxAccessToken) {
         List<Record> allRecords = repository.findAll();
-        dropboxConfig.uploadBackup(allRecords, accessToken);
+        dropboxConfig.uploadBackup(allRecords, dropboxAccessToken.getAccessToken());
     }
 
-    private void restoreRecords() {
-        String accessToken = accessTokenHelper.getDropboxAccessToken();
-        List<Record> records = dropboxConfig.downloadBackup(accessToken);
+    private void restoreRecords(AccessToken dropboxAccessToken) {
+        List<Record> records = dropboxConfig.downloadBackup(dropboxAccessToken.getAccessToken());
         if (records != null) {
             repository.deleteAll();
             repository.saveAll(records);
